@@ -3,16 +3,18 @@ import { getProducts, IProducts } from '../../../shared/api/product';
 import { ErrorType, RejectedDataType } from '../../../shared/types';
 
 export const fetchProducts = createAsyncThunk<
-	{ products: IProducts[]; totalPages: number }, // Изменено на правильный тип возвращаемого значения
+	{ products: IProducts[]; totalPages: number }, 
 	string,
 	{ readonly rejectValue: RejectedDataType }
 >('products/fetchProducts', async (page: string, thunkAPI) => {
+	
 	const limit = 10; // Количество элементов на странице
 	const offset = (parseInt(page) - 1) * limit; // Расчет смещения
 
 	try {
 		const response = await getProducts(offset, limit);
-		return response; // Убедитесь, что функция getProducts возвращает правильный объект
+		return response; 
+		
 	} catch (err: unknown) {
 		const knownError = err as ErrorType;
 

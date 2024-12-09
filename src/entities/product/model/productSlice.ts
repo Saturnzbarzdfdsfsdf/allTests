@@ -51,7 +51,7 @@ const productsSlice = createSlice({
 			.addCase(fetchProducts.rejected, (state, action) => {
 				state.loading = false;
 				if (action.payload) {
-					state.error = action.payload.messageError; // Устанавливаем сообщение об ошибке
+					state.error = action.payload.messageError;
 				}
 			});
 	},
