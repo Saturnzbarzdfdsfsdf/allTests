@@ -1,0 +1,32 @@
+.container {
+	color: whitesmoke;
+	background-color: rgb(48, 48, 48);
+	width: 1500px;
+	margin: 0 auto;
+}
+
+.boxCard {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(2, 1fr);
+	grid-column-gap: 20px;
+	grid-row-gap: 40px;
+	padding: 100px 50px;
+}
+
+.card {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 10px;
+
+	font-size: 15px;
+	border-radius: 15px;
+	padding: 15px;
+	border: 2px solid white;
+	
+}
+
+.card img {
+	border-radius: 30px;
+}
