@@ -1,90 +1,72 @@
-import { FC, useEffect, useState, ChangeEvent } from 'react';
+import { FC, useEffect } from 'react';
 
-import { BASE_URL } from '../utils/const';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from './hooks/hooks';
+import {setCurrentPage} from '../entities/product/model/productSlice'
+
+import { fetchProducts } from '../entities/product/model/productsThunk';
+import { RootState } from './store';
+
+// import { Pagination } from '../features/Pagination/index';
 
 import { Pagination } from '@mui/material';
 
 import styles from './App.module.css';
 
-interface IProducts {
-	title: string;
-	price: string;
-	images: string[];
-	id: number;
-}
-
 const App: FC = () => {
-	// Продукт
-	const [products, setProducts] = useState<IProducts[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState<Error | null>(null);
+	const dispatch = useAppDispatch();
 
-	// Пагинация
-	const [totalCount, setTotalCount] = useState<number>(0);
-	const [currentPage, setCurrentPage] = useState(1);
+	const products = useSelector((state: RootState) => state.product.products);
 
-	const LIMIT = 5;
-	const limitTotalPage = 1;
+	const loading = useSelector((state: RootState) => state.product.loading);
 
-	const onChangePagination = (
-		event: ChangeEvent<unknown>, // Изменяем тип на unknown
-		page: number
-	) => {
-		setCurrentPage(page); // Устанавливаем текущую страницу
-	};
-	console.log('This PRODUCT', products);
+	const currentPage = useSelector(
+		(state: RootState) => state.product.currentPage
+	);
 
-// 'https://api.escuelajs.co/api/v1/products';
+	const totalPages = useSelector(
+		(state: RootState) => state.product.totalPages
+	);
 
 	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const response = await fetch(
-					`${BASE_URL}?offset=${(currentPage - 1) * LIMIT}&limit=${LIMIT}`
-					// `${BASE_URL}?page=${currentPage}&limit=${LIMIT}`
-				);
-				if (!response.ok) {
-					throw new Error('Network response was not ok');
-				}
-				const data = await response.json();
-				setProducts(data); // Устанавливаем полученные данные в состояние
-				setTotalCount(data.length);
-			} catch (error) {
-				if (error instanceof Error) {
-					setError(error);
-					// Устанавливаем ошибку в состояние
-				}
-			} finally {
-				setIsLoading(false); // Завершаем загрузку
-			}
+		dispatch(fetchProducts(currentPage.toString()));
+	}, [dispatch, currentPage]);
+
+	if (loading) return <div>Loading...</div>;
+
+  console.log('Total Page', totalPages);
+	console.log('Current Page', currentPage);
+
+		const handlePageChange = (
+			event: React.ChangeEvent<unknown>,
+			value: number
+		) => {
+			dispatch(setCurrentPage(value)); // Устанавливаем новую текущую страницу
+			dispatch(fetchProducts(value.toString())); // Запрашиваем продукты для новой страницы
 		};
-
-		fetchProducts(); // Вызываем функцию фетча
-	}, [currentPage]);
-
-	// Обработка состояния загрузки и ошибок
-	if (isLoading) return <div>Загрузка...</div>;
-	if (error) return <div>Ошибка: {error.message}</div>;
-
-	const totalPages = Math.ceil(totalCount / limitTotalPage);
-	// const sliceProduct = products.slice(0, LIMIT);
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.boxCard}>
-				{products.map(product => (
-					<div key={product.id} className={styles.card}>
-						<h3>{product.title}</h3>
-						<p>{product.price}</p>
-						<img src={product.images[0]} alt={product.title} />
-					</div>
-				))}
+				{Array.isArray(products) && products.length > 0 ? ( // Проверка на массив и наличие элементов
+					products.map(product => (
+						<div key={product.id} className={styles.card}>
+							<h3>{product.title}</h3>
+							<p>{product.price}</p>
+							<img src={product.images[0]} alt={product.title} />
+						</div>
+					))
+				) : (
+					<div>No products available</div> // Сообщение об отсутствии продуктов
+				)}
+			</div>
+			<div className={styles.paginBox}>
 				<Pagination
-					size='large'
-					count={totalPages}
-					page={currentPage}
-					onChange={onChangePagination}
-					color='secondary'
+					count={totalPages.length} // Общее количество страниц
+					page={currentPage} // Текущая страница
+					onChange={handlePageChange}
+					variant='outlined' // Стиль пагинации
+					color='primary' // Цвет пагинации
 				/>
 			</div>
 		</div>

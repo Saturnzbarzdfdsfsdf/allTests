@@ -1,7 +1,7 @@
 interface ICategory {
 	readonly category: {
 		id: number;
-		name: string;
+		name?: string;
 		image: string;
 	};
 }
@@ -9,8 +9,8 @@ interface ICategory {
 export interface IProducts {
 	readonly id: number;
 	readonly price: number;
-	readonly images?: string[];
 	readonly title: string;
-	readonly description: string;
-	readonly category: ICategory;
+	readonly images?: string[];
+	readonly description?: string;
+	readonly category?: ICategory;
 }

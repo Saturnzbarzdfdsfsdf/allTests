@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IProducts } from '../../../shared/api/product';
-import { fetchProducts } from './productsThunk'; 
+import { fetchProducts } from './productsThunk';
 
 interface ProductsState {
 	products: IProducts[];
@@ -18,7 +18,6 @@ const initialState: ProductsState = {
 	loading: false,
 	error: null,
 };
-
 const productsSlice = createSlice({
 	name: 'product',
 	initialState,
@@ -43,8 +42,8 @@ const productsSlice = createSlice({
 					state,
 					action: PayloadAction<{ products: IProducts[]; totalPages: number }>
 				) => {
-					state.products = action.payload.products;
-					state.totalPages = action.payload.totalPages;
+					state.products = action.payload;
+					state.totalPages = action.payload;
 					state.loading = false;
 				}
 			)
@@ -54,9 +53,10 @@ const productsSlice = createSlice({
 					state.error = action.payload.messageError;
 				}
 			});
-	},
-});
+		},
+	});
 
+	
 export const { setCurrentPage, setLoading } = productsSlice.actions;
 
 export default productsSlice.reducer;
