@@ -6,7 +6,6 @@ const store = configureStore({
 	reducer: {
 		product: productsReducer, 
 	},
-	// middleware: getDefaultMiddleware => getDefaultMiddleware(),
 });
 
 
