@@ -1,17 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IProducts } from '../../../shared/api/product';
 import { fetchProducts } from './productsThunk';
 
-interface ProductsState {
-	products: IProducts[];
-	currentPage: number;
-	totalPages: number;
-	loading: boolean;
-	error: string | null;
-}
+import { IProducts } from '../../../shared/api/product';
+import { IProductsState } from './types';
 
-const initialState: ProductsState = {
+
+const initialState: IProductsState = {
 	products: [],
 	currentPage: 1,
 	totalPages: 0,
@@ -53,10 +48,9 @@ const productsSlice = createSlice({
 					state.error = action.payload.messageError;
 				}
 			});
-		},
-	});
+	},
+});
 
-	
 export const { setCurrentPage, setLoading } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -1,12 +1,12 @@
-import { apiInstance } from '../base';
+import { apiGet } from '../base';
+
 import { IProducts } from './types';
 
-const BASE_URL = 'products';
+const PRODUCTS_ENDPOINT = 'products';
 
-export const getProducts = (
+export const getProducts = async (
 	offset: number,
 	limit: number
 ): Promise<{ products: IProducts[]; totalPages: number }> => {
-	return apiInstance.get(`${BASE_URL}?offset=${offset}&limit=${limit}`);
+	return await apiGet(`${PRODUCTS_ENDPOINT}?offset=${offset}&limit=${limit}`);
 };
-
