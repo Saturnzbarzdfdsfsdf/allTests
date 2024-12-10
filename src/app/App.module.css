@@ -30,3 +30,12 @@
 .card img {
 	border-radius: 30px;
 }
+.paginBox {
+	padding: 50px;
+	display: flex;
+	justify-content: center;
+	background-color: white;
+}
+h1 {
+	color: black;
+}
