@@ -9,7 +9,7 @@ export const fetchProducts = createAsyncThunk<
 	{ readonly rejectValue: RejectedDataType } // Вернется в случае ошибки
 >('products/fetchProducts', async (page: string, thunkAPI) => {
 
-	const limit = 4;
+	const limit = 10;
 	const offset = (parseInt(page) - 1) * limit;
 
 	try {

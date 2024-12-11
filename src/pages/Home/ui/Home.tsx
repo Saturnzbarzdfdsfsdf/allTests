@@ -17,11 +17,14 @@ import { ProductCard } from '../../../entities/product';
 import { Pagination } from '@mui/material';
 
 import styles from './Home.module.css';
+import ProductSlider from '../../../features/swiper/ProductSlider';
 
 const Home: FC = () => {
 	const dispatch = useAppDispatch();
 
 	const products = useSelector(selectProducts);
+	const productSlice = products.slice(0, 4);
+	
 	const currentPage = useSelector(selectCurrentPage);
 	// const totalPages = useSelector(selectTotalPages);
 
@@ -36,11 +39,14 @@ const Home: FC = () => {
 		dispatch(setCurrentPage(value));
 		dispatch(fetchProducts(value.toString()));
 	};
+
 	return (
 		<>
 			<div className={styles.boxCard}>
+				<ProductSlider />
+
 				{Array.isArray(products) && products.length > 0 ? (
-					products.map(product => (
+					productSlice.map(product => (
 						<ProductCard key={product.id} product={product} />
 					))
 				) : (
